@@ -116,4 +116,10 @@ export class PujaService{
  }
 
 
+ public guardaPuja(puja : Puja){
+
+   this.ofertas.push(puja);
+
  }
+
+}

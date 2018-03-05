@@ -7,6 +7,7 @@ import { UserService } from '../../services/user.services';
 import { TransporteService } from '../../services/transporte.services';
 import { PujaService } from '../../services/puja.services';
 import { Observable, Subscriber } from 'rxjs';
+import { Puja } from '../../app/puja';
 
 
 @IonicPage()
@@ -17,7 +18,7 @@ import { Observable, Subscriber } from 'rxjs';
 export class OfertasPage{
 
   viajes: Observable<any>;
-  ofertas: FirebaseListObservable<any>;
+
   userProfile: any;
   localUser:any;
 
@@ -32,8 +33,6 @@ export class OfertasPage{
     this.localUser = userService.getLocalUser();
     this.userProfile = userService.getUserProfile();
 
-
-    //this.ofertas = pujaService.getTotalOfertas();
   }
 
   ionViewDidLoad() {
@@ -71,15 +70,14 @@ export class OfertasPage{
         {
           text: 'Ofertar',
           handler: data => {
-
-              this.ofertas.push({
-              idViaje: viaje.$key,
-              importe: data.importe,
-              idUsuario:this.localUser.uid,
-              anulada: false,
-              fecha:new Date(),
-              resumen: 'De ' + viaje.origen.formatted_address + ' a ' + viaje.destino.formatted_address
-            });
+              let puja = new Puja();
+              puja.idViaje = viaje.$key;
+              puja.importe = data.importe;
+              puja.idUsuario = this.localUser.uid;
+              puja.anulada = false;
+              puja.fecha = new Date();
+              puja.resumen = 'De ' + viaje.origen.formatted_address + ' a ' + viaje.destino.formatted_address;
+              this.pujaService.guardaPuja(puja);
           }
         }
       ]
