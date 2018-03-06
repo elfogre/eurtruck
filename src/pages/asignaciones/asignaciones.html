@@ -4,7 +4,7 @@
         <ion-icon name="menu"></ion-icon>
       </button>
       <ion-title>
-        Ofertas Asignadas
+        Ofertas Asignadas {{ (viajes | async)?.length }}
       </ion-title>
     </ion-navbar>
   </ion-header>
