@@ -18,7 +18,6 @@ import { Puja } from '../../app/puja';
 export class OfertasPage{
 
   viajes: Observable<any>;
-
   userProfile: any;
   localUser:any;
 
@@ -28,11 +27,9 @@ export class OfertasPage{
     public transporteService: TransporteService,
     public pujaService: PujaService,
     public userService: UserService
-  ) {
-
+  ){
     this.localUser = userService.getLocalUser();
     this.userProfile = userService.getUserProfile();
-
   }
 
   ionViewDidLoad() {

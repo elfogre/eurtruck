@@ -3,6 +3,7 @@ import { FirebaseListObservable, AngularFireDatabase,
   FirebaseObjectObservable  } from 'angularfire2/database';
 import { Observable, Subscriber } from 'rxjs';
 import { Transporte } from '../app/transporte';
+import { Publicacion } from '../app/publicacion';
 import { PujaService } from '../services/puja.services';
 
 
@@ -58,12 +59,13 @@ updateViaje(viaje){
    });
  }
 
- public getOfertasPublicadas(id):  Observable<Transporte[]>{
+ public getOfertasPublicadas(id):  Publicacion[] {
    console.log('buscando ofertas para el user ' + id);
    let viajesFiltrados=[];
    this.viajes.subscribe(viajes => {
        viajes.forEach(viaje => {
          if(viaje.userId==id){
+           let publicacion = new Publicacion();
            let transporte = new Transporte();
            transporte.carga = viaje.carga;
            transporte.codigoLavado = viaje.codigoLavado;
@@ -74,20 +76,20 @@ updateViaje(viaje){
            transporte.fechaDescarga = viaje.fechaDescarga;
            transporte.fechaOrden = viaje.fechaOrden;
            transporte.idTransporte = viaje.$key;
-
            transporte.idTransportista = viaje.idTransportista;
            transporte.mercancia = viaje.mercancia;
-
-             transporte.numPujas=this.pujaService.getNumPujasByViaje(viaje.$key);
-
            transporte.observaciones = viaje.observaciones;
            transporte.origen = viaje.origen;
-           viajesFiltrados.push(transporte);
+
+           publicacion.transporte=transporte;
+           publicacion.pujas = this.pujaService.getPujasDeViaje(viaje.$key);
+
+           viajesFiltrados.push(publicacion);
            //viajesFiltrados.push(viaje);
          }
        });
      });
-   return  Observable.of(viajesFiltrados);
+   return  viajesFiltrados;
 }
 
  public getOfertasAsignadas(id) : Observable<any[]>{

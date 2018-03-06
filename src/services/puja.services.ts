@@ -49,20 +49,13 @@ export class PujaService{
     return  pujasObservable =  Observable.of(pujas);
   }
 
-  public getNumPujasByViaje(idViaje): any{
-
-    this.ofertas= this.database.list('/ofertas',{
+  public getPujasDeViaje(idViaje) : FirebaseListObservable<any>{
+    return this.database.list('/ofertas',{
       query:{
         orderByChild: 'idViaje',
         equalTo: idViaje
       }
-    });
-
-      this.ofertas.subscribe(ofertas => {
-
-          return ofertas.length;
-      });
-    return 0;
+    })
   }
 
   public getOfertasByViaje(idViaje): Observable<Puja[]>{

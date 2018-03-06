@@ -8,6 +8,7 @@ import { TransporteService } from '../../services/transporte.services';
 import { PujaService } from '../../services/puja.services';
 import { Observable, Subscriber } from 'rxjs';
 import { Transporte } from '../../app/transporte';
+import { Publicacion } from '../../app/publicacion';
 
 @Component({
   selector: 'page-publicadas',
@@ -15,7 +16,7 @@ import { Transporte } from '../../app/transporte';
 })
 export class PublicadasPage {
 
-  viajes: Observable<Transporte[]>;
+  viajes: Publicacion[];
   userProfile:any;
   localUser:any;
 
