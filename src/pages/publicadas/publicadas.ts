@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController, ActionSheetController } from 'ionic-angular';
 import { FirebaseListObservable, AngularFireDatabase, FirebaseObjectObservable  } from 'angularfire2/database';
 import { DetallePage } from '../detalle/detalle';
+import { NuevoViajePage } from '../nuevoViaje/nuevoViaje';
 import { OfertadasPage } from '../ofertadas/ofertadas';
 import { UserService } from '../../services/user.services';
 import { TransporteService } from '../../services/transporte.services';
@@ -15,7 +16,6 @@ import { Publicacion } from '../../app/publicacion';
   templateUrl: 'publicadas.html',
 })
 export class PublicadasPage {
-
   viajes: Publicacion[];
   userProfile:any;
   localUser:any;
@@ -29,17 +29,21 @@ export class PublicadasPage {
     public database: AngularFireDatabase,
     public actionSheetCtrl: ActionSheetController
   ){
-
     this.localUser = userService.getLocalUser();
     this.userProfile = userService.getUserProfile();
     this.viajes = transporteService.getOfertasPublicadas(this.localUser.uid);
-
   }
 
   presentActionSheet(viaje) {
    let actionSheet = this.actionSheetCtrl.create({
      title: 'Acciones',
      buttons: [
+       {
+         text: 'Editar',
+         handler: () => {
+           this.navCtrl.push(NuevoViajePage, {idViaje:viaje.idTransporte});
+         }
+       },
        {
          text: 'Detalle',
          handler: () => {
@@ -58,15 +62,13 @@ export class PublicadasPage {
        }
      ]
    });
-
-    actionSheet.present();
+   actionSheet.present();
  }
 
 
  borrar(idTransporte){
    let newTaskModal = this.alertCtrl.create({
-     title: 'Anular el transporte?',
-
+   title: 'Anular el transporte?',
      buttons: [
        {
          text: 'Cancel',
@@ -87,7 +89,5 @@ export class PublicadasPage {
    });
    newTaskModal.present( newTaskModal );
  }
-
-
 
 }

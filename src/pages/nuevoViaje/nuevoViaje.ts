@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { FirebaseListObservable, AngularFireDatabase  } from 'angularfire2/database';
 import { OfertasPage } from '../ofertas/ofertas';
 import { TransporteService } from '../../services/transporte.services';
@@ -19,6 +19,8 @@ export class NuevoViajePage {
     localUser: any;
     autocompleteOrigen: any;
     autocompleteDestino: any;
+    edicion: boolean;
+
     poly = new google.maps.Polyline({
       strokeColor: '#FF0000',
       strokeOpacity: 1.0,
@@ -36,22 +38,46 @@ export class NuevoViajePage {
     });
 
 
-    constructor(public navCtrl: NavController, public builder: FormBuilder,
+    constructor(public navCtrl: NavController, public navParams: NavParams, public builder: FormBuilder,
         public transporteService: TransporteService ) {
 
       this.localUser= JSON.parse(window.localStorage.getItem('user'));
       this.viajes = transporteService.getViajes();
-      this.myForm = builder.group({
-        'origen': ['', Validators.required],
-        'destino': ['', Validators.required],
-        'fechac':['', Validators.required],
-        'fechad':['', Validators.required],
-        'carga':['', Validators.required],
-        'mercancia':['', Validators.required],
-        'observaciones':['',],
-        'especificaciones':['',],
-        'codigoLavado':['',]
-      })
+
+      let idViajeEdicion = navParams.get('idViaje');
+
+      if(idViajeEdicion == null || idViajeEdicion == ''){
+        this.myForm = builder.group({
+          'origen': ['', Validators.required],
+          'destino': ['', Validators.required],
+          'fechac':['', Validators.required],
+          'fechad':['', Validators.required],
+          'carga':['', Validators.required],
+          'mercancia':['', Validators.required],
+          'observaciones':['',],
+          'especificaciones':['',],
+          'codigoLavado':['',]
+        })
+      }else{
+
+        transporteService.getViaje(idViajeEdicion).subscribe(viaje => {
+          this.myForm = builder.group({
+            'origen': [viaje.origen.formatted_address, Validators.required],
+            'destino': [viaje.destino.formatted_address, Validators.required],
+            'fechac':[viaje.fechac, Validators.required],
+            'fechad':[viaje.fechad, Validators.required],
+            'carga':[viaje.carga, Validators.required],
+            'mercancia':[viaje.mercancia, Validators.required],
+            'observaciones':[viaje.observaciones,],
+            'especificaciones':[viaje.especificaciones,],
+            'codigoLavado':[viaje.codigoLavado,]
+          })
+
+        });
+
+      }
+
+
     }
 
     onSubmit(formData) {
