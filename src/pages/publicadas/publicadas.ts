@@ -53,7 +53,7 @@ export class PublicadasPage {
        },{
          text: 'Anular',
          handler: () => {
-           this.borrar(viaje);
+           this.borrar(viaje.idTransporte);
          }
        }
      ]
@@ -63,7 +63,7 @@ export class PublicadasPage {
  }
 
 
- borrar(viaje){
+ borrar(idTransporte){
    let newTaskModal = this.alertCtrl.create({
      title: 'Anular el transporte?',
 
@@ -77,8 +77,10 @@ export class PublicadasPage {
        {
          text: 'Aceptar',
           handler: data => {
+            let viaje = this.transporteService.getViaje(idTransporte);
             this.transporteService.removeViaje(viaje);
-            this.pujaService.anulaPujas(viaje.idTransporte);
+            this.pujaService.anulaPujas(idTransporte);
+            this.navCtrl.setRoot(PublicadasPage);
          }
        }
      ]

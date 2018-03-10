@@ -8,6 +8,7 @@ import { TransporteService } from '../../services/transporte.services';
 import { PujaService } from '../../services/puja.services';
 import { Observable, Subscriber } from 'rxjs';
 import { Puja } from '../../app/puja';
+import { LoadingController } from 'ionic-angular';
 
 
 @IonicPage()
@@ -22,6 +23,7 @@ export class OfertasPage{
   localUser:any;
 
   constructor(
+    public loadingCtrl: LoadingController,
     public navCtrl: NavController,
     public alertCtrl: AlertController,
     public transporteService: TransporteService,
@@ -30,6 +32,15 @@ export class OfertasPage{
   ){
     this.localUser = userService.getLocalUser();
     this.userProfile = userService.getUserProfile();
+  }
+
+
+  presentLoading() {
+    let loader = this.loadingCtrl.create({
+      content: "Cargando ofertas...",
+      duration: 3000
+    });
+    loader.present();
   }
 
   ionViewDidLoad() {

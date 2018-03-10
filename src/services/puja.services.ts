@@ -103,8 +103,10 @@ export class PujaService{
      }
    });
    pujas.subscribe(items => {
-    const item = items[0];
-    pujas.update(item, { anulada: true });
+     items.forEach(item => {
+         pujas.update(item, { anulada: true });
+     })
+
    });
  }
 

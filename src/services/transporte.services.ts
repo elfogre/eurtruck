@@ -106,7 +106,7 @@ updateViaje(viaje){
 }
 
  removeViaje( viaje ){
-   this.viajes.remove( viaje.$key );
+   this.viajes.remove(viaje);
  }
 
 }
