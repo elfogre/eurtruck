@@ -32,18 +32,20 @@
           </div>
           <ion-item>
             <p> Id de viaje: {{viaje.$key}}</p>
+              <p> Fecha de carga: {{viaje.fechac}}</p>
             <span item-left></span>
           </ion-item>
+
             <ion-item>
                 <ion-icon color="subtle" name="arrow-dropright-circle" item-start large></ion-icon>
-                <h2>{{ viaje.origen.name }}</h2>
-                <p>{{ viaje.origen.formatted_address }}</p>
+                <h2>{{ viaje.origen.provincia }}</h2>
+                <p>{{ viaje.origen.pais }}</p>
               </ion-item>
 
               <ion-item>
                 <ion-icon color="subtle" large item-start name="arrow-dropleft-circle"></ion-icon>
-                <h2>{{ viaje.destino.name }}</h2>
-                <p>{{ viaje.destino.formatted_address }}</p>
+                <h2>{{ viaje.destino.provincia }}</h2>
+                <p>{{ viaje.destino.pais }}</p>
               </ion-item>
 
               <ion-item>

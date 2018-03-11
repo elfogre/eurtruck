@@ -18,17 +18,31 @@
     <div style="position: relative">
       <img src="https://maps.googleapis.com/maps/api/staticmap?size=600x300&path=color:0x0000ff|weight:5|{{ viaje.origen.lat }},{{ viaje.origen.lng }}|{{ viaje.destino.lat }},{{ viaje.destino.lng }}&key=AIzaSyDAwA6ASuWzPzvoSHZDSWdBwKkjwEN9Pp0">
     </div>
-    <ion-item>
+    <ion-item *ngIf="viaje.idTransportista!='';else origenProvincia">
         <ion-icon color="subtle" name="arrow-dropright-circle" item-start large></ion-icon>
         <h2>{{ viaje.origen.name }}</h2>
         <p>{{ viaje.origen.formatted_address }}</p>
       </ion-item>
+      <ng-template #origenProvincia>
+        <ion-item>
+            <ion-icon color="subtle" name="arrow-dropright-circle" item-start large></ion-icon>
+            <h2>{{ viaje.origen.provincia }}</h2>
+            <p>{{ viaje.origen.pais }}</p>
+          </ion-item>
+      </ng-template>
 
-      <ion-item>
+      <ion-item *ngIf="viaje.idTransportista!='';else destinoProvincia">
         <ion-icon color="subtle" large item-start name="arrow-dropleft-circle"></ion-icon>
         <h2>{{ viaje.destino.name }}</h2>
         <p>{{ viaje.destino.formatted_address }}</p>
       </ion-item>
+      <ng-template #destinoProvincia>
+        <ion-item>
+            <ion-icon color="subtle" name="arrow-dropright-circle" item-start large></ion-icon>
+            <h2>{{ viaje.destino.provincia }}</h2>
+            <p>{{ viaje.destino.pais }}</p>
+          </ion-item>
+      </ng-template>
 
       <ion-item>
         <span item-left>> {{viaje.distancia}} Kms</span>
@@ -67,16 +81,16 @@
         <ion-label stacked>Especificaciones</ion-label>
         <ion-textarea disabled type="text" [(ngModel)]="viaje.especificaciones" name="especificaciones"></ion-textarea>
     </ion-item>
-    <ion-item class="text-center item-accordion item-icon-left item-header">
+    <ion-item *ngIf="viaje.idTransportista!=''" class="text-center item-accordion item-icon-left item-header">
         <ion-label stacked>Observaciones</ion-label>
         <ion-textarea disabled type="text" [(ngModel)]="viaje.observaciones" name="observaciones"></ion-textarea>
     </ion-item>
-    <ion-item class="text-center item-accordion item-icon-left item-header">
+    <ion-item *ngIf="viaje.idTransportista!=''" class="text-center item-accordion item-icon-left item-header">
         <ion-label stacked>Código de lavado</ion-label>
         <ion-textarea disabled type="text" [(ngModel)]="viaje.codigoLavado" name="codigoLavado"></ion-textarea>
     </ion-item>
 
-    <ion-item *ngIf="viaje.idTransportista!=''" (click)="viewProfile(viaje.userId)">
+    <ion-item (click)="viewProfile(viaje.userId)">
       <ion-avatar item-start large>
         <img src="{{ (userProfile | async)?.picture }}" >
       </ion-avatar>
