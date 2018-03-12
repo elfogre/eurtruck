@@ -52,8 +52,10 @@ export class NuevoViajePage {
           'destino': ['', Validators.required],
           'fechac':['', Validators.required],
           'fechad':['', Validators.required],
+          'tipo':['', Validators.required],
           'carga':['', Validators.required],
           'mercancia':['', Validators.required],
+          'referencia':['', ],
           'observaciones':['',],
           'especificaciones':['',],
           'codigoLavado':['',]
@@ -68,6 +70,8 @@ export class NuevoViajePage {
             'fechad':[viaje.fechad, Validators.required],
             'carga':[viaje.carga, Validators.required],
             'mercancia':[viaje.mercancia, Validators.required],
+            'tipo':[viaje.tipo, Validators.required],
+            'referencia':[viaje.referencia, ],
             'observaciones':[viaje.observaciones,],
             'especificaciones':[viaje.especificaciones,],
             'codigoLavado':[viaje.codigoLavado,]
@@ -142,6 +146,8 @@ export class NuevoViajePage {
         fechac: formData.value.fechac,
         fechad: formData.value.fechad,
         mercancia: formData.value.mercancia,
+        tipo: formData.value.tipo,
+        referencia: formData.value.referencia,
         observaciones: formData.value.observaciones,
         especificaciones: formData.value.especificaciones,
         codigoLavado: formData.value.codigoLavado,

@@ -27,6 +27,23 @@
                 <div #map id="map"></div>
             </ion-item>
             <ion-item class="text-center item-accordion item-icon-left item-header">
+              <ion-label stacked>Tipo</ion-label>
+              <ion-select formControlName="tipo">
+                <ion-option value="ci">Cisterna</ion-option>
+                <ion-option value="fr">Frigo</ion-option>
+                <ion-option value="pl">Plataforma</ion-option>
+                <ion-option value="ta">Tauliner</ion-option>
+                <ion-option value="co">Contenedor</ion-option>
+              </ion-select>
+            </ion-item>
+            <p [hidden]="myForm.controls.tipo.valid" danger padding-left>Obligatorio</p>
+
+            <ion-item class="text-center item-accordion item-icon-left item-header">
+                <ion-label stacked>Referencia</ion-label>
+                <ion-input type="text" formControlName="referencia" name="referencia"></ion-input>
+            </ion-item>
+
+            <ion-item class="text-center item-accordion item-icon-left item-header">
                 <ion-label stacked>Mercancía</ion-label>
                 <ion-input type="text" formControlName="mercancia" name="mercancia"></ion-input>
             </ion-item>
