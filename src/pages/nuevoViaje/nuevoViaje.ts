@@ -12,9 +12,12 @@ declare var google;
 })
 export class NuevoViajePage {
 
+    origenEdit: any;
+    destinoEdit: any;
     @ViewChild('map') mapElement: ElementRef;
     map: any;
     viajes: FirebaseListObservable<any>;
+    viaje: any;
     myForm: FormGroup;
     localUser: any;
     autocompleteOrigen: any;
@@ -47,6 +50,7 @@ export class NuevoViajePage {
       let idViajeEdicion = navParams.get('idViaje');
 
       if(idViajeEdicion == null || idViajeEdicion == ''){
+        this.edicion = false;
         this.myForm = builder.group({
           'origen': ['', Validators.required],
           'destino': ['', Validators.required],
@@ -61,8 +65,11 @@ export class NuevoViajePage {
           'codigoLavado':['',]
         })
       }else{
-
+        this.edicion = true;
+        this.viaje = transporteService.getViaje(idViajeEdicion);
         transporteService.getViaje(idViajeEdicion).subscribe(viaje => {
+          this.origenEdit = viaje.origen;
+          this.destinoEdit = viaje.destino;
           this.myForm = builder.group({
             'origen': [viaje.origen.formatted_address, Validators.required],
             'destino': [viaje.destino.formatted_address, Validators.required],
@@ -91,73 +98,102 @@ export class NuevoViajePage {
 
       let fechaEnMilis:number = ahora - dateOrigen;
 
-      var destinoVar = this.autocompleteDestino.getPlace().geometry.location.toJSON()
-      destinoVar.formatted_address = this.autocompleteDestino.getPlace().formatted_address;
-      destinoVar.name = this.autocompleteDestino.getPlace().name;
+      var destinoVar = null;
+      if (this.autocompleteDestino.getPlace() && this.autocompleteDestino.getPlace().geometry) {
+
+        destinoVar = this.autocompleteDestino.getPlace().geometry.location.toJSON();
+        destinoVar.formatted_address = this.autocompleteDestino.getPlace().formatted_address;
+        destinoVar.name = this.autocompleteDestino.getPlace().name;
 
 
-      var arrayLength = this.autocompleteDestino.getPlace().address_components.length;
-      for (var i = 0; i < arrayLength; i++) {
-        if (this.autocompleteDestino.getPlace().address_components[i].types[0] === 'postal_code') {
-          destinoVar.postal_code = this.autocompleteDestino.getPlace().address_components[i].long_name;
-        }
-        if (this.autocompleteDestino.getPlace().address_components[i].types[0] === 'country') {
-          destinoVar.pais = this.autocompleteDestino.getPlace().address_components[i].long_name;
-        }
-        if (this.autocompleteDestino.getPlace().address_components[i].types[0] === 'administrative_area_level_1') {
-          destinoVar.comunidad = this.autocompleteDestino.getPlace().address_components[i].long_name;
-        }
-        if (this.autocompleteDestino.getPlace().address_components[i].types[0] === 'administrative_area_level_2') {
-          destinoVar.provincia = this.autocompleteDestino.getPlace().address_components[i].long_name;
-        }
-        if (this.autocompleteDestino.getPlace().address_components[i].types[0] === 'locality') {
-          destinoVar.localidad = this.autocompleteDestino.getPlace().address_components[i].long_name;
+        var arrayLength = this.autocompleteDestino.getPlace().address_components.length;
+        for (var i = 0; i < arrayLength; i++) {
+          if (this.autocompleteDestino.getPlace().address_components[i].types[0] === 'postal_code') {
+            destinoVar.postal_code = this.autocompleteDestino.getPlace().address_components[i].long_name;
+          }
+          if (this.autocompleteDestino.getPlace().address_components[i].types[0] === 'country') {
+            destinoVar.pais = this.autocompleteDestino.getPlace().address_components[i].long_name;
+          }
+          if (this.autocompleteDestino.getPlace().address_components[i].types[0] === 'administrative_area_level_1') {
+            destinoVar.comunidad = this.autocompleteDestino.getPlace().address_components[i].long_name;
+          }
+          if (this.autocompleteDestino.getPlace().address_components[i].types[0] === 'administrative_area_level_2') {
+            destinoVar.provincia = this.autocompleteDestino.getPlace().address_components[i].long_name;
+          }
+          if (this.autocompleteDestino.getPlace().address_components[i].types[0] === 'locality') {
+            destinoVar.localidad = this.autocompleteDestino.getPlace().address_components[i].long_name;
+          }
         }
       }
 
-      var origenVar = this.autocompleteOrigen.getPlace().geometry.location.toJSON()
-      origenVar.formatted_address = this.autocompleteOrigen.getPlace().formatted_address;
-      origenVar.name = this.autocompleteOrigen.getPlace().name;
+      var origenVar = null;
 
-      arrayLength = this.autocompleteOrigen.getPlace().address_components.length;
-      for (var i = 0; i < arrayLength; i++) {
-        if (this.autocompleteOrigen.getPlace().address_components[i].types[0] === 'postal_code') {
-          origenVar.postal_code = this.autocompleteOrigen.getPlace().address_components[i].long_name;
-        }
-        if (this.autocompleteOrigen.getPlace().address_components[i].types[0] === 'country') {
-          origenVar.pais = this.autocompleteOrigen.getPlace().address_components[i].long_name;
-        }
-        if (this.autocompleteOrigen.getPlace().address_components[i].types[0] === 'administrative_area_level_1') {
-          origenVar.comunidad = this.autocompleteOrigen.getPlace().address_components[i].long_name;
-        }
-        if (this.autocompleteOrigen.getPlace().address_components[i].types[0] === 'administrative_area_level_2') {
-          origenVar.provincia = this.autocompleteOrigen.getPlace().address_components[i].long_name;
-        }
-        if (this.autocompleteOrigen.getPlace().address_components[i].types[0] === 'locality') {
-          origenVar.localidad = this.autocompleteOrigen.getPlace().address_components[i].long_name;
+      if (this.autocompleteOrigen.getPlace() && this.autocompleteOrigen.getPlace().geometry) {
+
+        origenVar = this.autocompleteOrigen.getPlace().geometry.location.toJSON();
+        origenVar.formatted_address = this.autocompleteOrigen.getPlace().formatted_address;
+        origenVar.name = this.autocompleteOrigen.getPlace().name;
+
+        arrayLength = this.autocompleteOrigen.getPlace().address_components.length;
+        for (var i = 0; i < arrayLength; i++) {
+          if (this.autocompleteOrigen.getPlace().address_components[i].types[0] === 'postal_code') {
+            origenVar.postal_code = this.autocompleteOrigen.getPlace().address_components[i].long_name;
+          }
+          if (this.autocompleteOrigen.getPlace().address_components[i].types[0] === 'country') {
+            origenVar.pais = this.autocompleteOrigen.getPlace().address_components[i].long_name;
+          }
+          if (this.autocompleteOrigen.getPlace().address_components[i].types[0] === 'administrative_area_level_1') {
+            origenVar.comunidad = this.autocompleteOrigen.getPlace().address_components[i].long_name;
+          }
+          if (this.autocompleteOrigen.getPlace().address_components[i].types[0] === 'administrative_area_level_2') {
+            origenVar.provincia = this.autocompleteOrigen.getPlace().address_components[i].long_name;
+          }
+          if (this.autocompleteOrigen.getPlace().address_components[i].types[0] === 'locality') {
+            origenVar.localidad = this.autocompleteOrigen.getPlace().address_components[i].long_name;
+          }
         }
       }
 
-      this.viajes.push({
-        destino: destinoVar,
-        origen: origenVar,
-        distancia: Math.round(google.maps.geometry.spherical.computeDistanceBetween(this.autocompleteOrigen.getPlace().geometry.location, this.autocompleteDestino.getPlace().geometry.location) / 1000),
-        carga: formData.value.carga,
-        fechac: formData.value.fechac,
-        fechad: formData.value.fechad,
-        mercancia: formData.value.mercancia,
-        tipo: formData.value.tipo,
-        referencia: formData.value.referencia,
-        observaciones: formData.value.observaciones,
-        especificaciones: formData.value.especificaciones,
-        codigoLavado: formData.value.codigoLavado,
-        idTransportista:'',
-        userId: this.localUser.uid,
-        done: false,
-        fechaCreacion: fechaEnMilis,
-        fechaOrden: (-1 * fechaEnMilis)
-     });
-     this.navCtrl.setRoot(OfertasPage);
+      if (this.edicion) {
+        this.viaje.update({carga: formData.value.carga,
+          fechac: formData.value.fechac,
+          fechad: formData.value.fechad,
+          mercancia: formData.value.mercancia,
+          tipo: formData.value.tipo,
+          referencia: formData.value.referencia,
+          observaciones: formData.value.observaciones,
+          especificaciones: formData.value.especificaciones,
+          codigoLavado: formData.value.codigoLavado
+        });
+        if (destinoVar != null) {
+          this.viaje.update({destino: destinoVar});
+        }
+        if (origenVar != null) {
+          this.viaje.update({origen: origenVar});
+        }
+        this.navCtrl.pop();
+      } else {
+        this.viajes.push({
+          destino: destinoVar,
+          origen: origenVar,
+          distancia: Math.round(google.maps.geometry.spherical.computeDistanceBetween(this.autocompleteOrigen.getPlace().geometry.location, this.autocompleteDestino.getPlace().geometry.location) / 1000),
+          carga: formData.value.carga,
+          fechac: formData.value.fechac,
+          fechad: formData.value.fechad,
+          mercancia: formData.value.mercancia,
+          tipo: formData.value.tipo,
+          referencia: formData.value.referencia,
+          observaciones: formData.value.observaciones,
+          especificaciones: formData.value.especificaciones,
+          codigoLavado: formData.value.codigoLavado,
+          idTransportista:'',
+          userId: this.localUser.uid,
+          done: false,
+          fechaCreacion: fechaEnMilis,
+          fechaOrden: (-1 * fechaEnMilis)
+       });
+       this.navCtrl.setRoot(OfertasPage);
+      }
     }
 
 
@@ -212,6 +248,24 @@ export class NuevoViajePage {
           document.getElementById('destino').getElementsByTagName('input')[0].placeholder = 'Introduzca una ciudad';
         }
       });
+
+      if (this.edicion) {
+        var origenLocation = {lat: this.origenEdit.lat, lng: this.origenEdit.lng};
+        var destinoLocation = {lat: this.destinoEdit.lat, lng: this.destinoEdit.lng};
+        this.markerOrigen.setPosition(origenLocation);
+        this.markerOrigen.setMap(this.map);
+        this.markerDestino.setPosition(destinoLocation);
+        this.markerDestino.setMap(this.map);
+
+        var bounds = new google.maps.LatLngBounds();
+        bounds.extend(destinoLocation);
+        bounds.extend(origenLocation);
+        this.map.fitBounds(bounds);
+        var path = [destinoLocation, origenLocation];
+        this.poly.setPath(path);
+        this.poly.setMap(this.map);
+
+      }
 
     }
 
