@@ -78,11 +78,17 @@
 
             <div class="loginButton">
 
-              <button class="google-sign-in button button-block"  ion-button
+              <button *ngIf="!edicion" class="google-sign-in button button-block"  ion-button
                   [disabled]="!myForm.controls.origen.valid || !myForm.controls.destino.valid
                     || !myForm.controls.mercancia.valid || !myForm.controls.carga.valid
                     || !myForm.controls.fechac.valid || !myForm.controls.fechad.valid"
                   >Publicar Viaje</button>
+
+                <button *ngIf="edicion" class="google-sign-in button button-block"  ion-button
+                [disabled]="!myForm.controls.origen.valid || !myForm.controls.destino.valid
+                || !myForm.controls.mercancia.valid || !myForm.controls.carga.valid
+                || !myForm.controls.fechac.valid || !myForm.controls.fechad.valid"
+                >Actualizar Viaje</button>
           </div>
         </form>
     </ion-list>
