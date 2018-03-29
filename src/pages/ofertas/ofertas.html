@@ -31,9 +31,14 @@
             </ion-fab>
           </div>
           <ion-item>
-              <p> Fecha de carga: {{viaje.fechac}}</p>
-              <p> Referencia: {{viaje.referencia}}</p>
-            <span item-left></span>
+            <p *ngIf="viaje.tipo == 'co'">Tipo: Contenedor</p>
+            <p *ngIf="viaje.tipo == 'ci'">Tipo: Cisterna</p>
+            <p *ngIf="viaje.tipo == 'ta'">Tipo: Tauliner</p>
+            <p *ngIf="viaje.tipo == 'fr'">Tipo: Frigo</p>
+            <p *ngIf="viaje.tipo == 'pl'">Tipo: Plataforma</p>
+            <p> Fecha de carga: {{viaje.fechac}}</p>
+            <p> Referencia: {{viaje.referencia}}</p>
+          <span item-left></span>
           </ion-item>
 
             <ion-item>

@@ -80,6 +80,8 @@ updateViaje(viaje){
            transporte.mercancia = viaje.mercancia;
            transporte.observaciones = viaje.observaciones;
            transporte.origen = viaje.origen;
+           transporte.referencia= viaje.referencia;
+           transporte.tipo= viaje.tipo; 
 
            publicacion.transporte=transporte;
            publicacion.pujas = this.pujaService.getPujasDeViaje(viaje.$key);

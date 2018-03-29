@@ -48,21 +48,30 @@
         <span item-left>> {{viaje.distancia}} Kms</span>
       </ion-item>
       <ion-item>
-        <span item-left>Id viaje</span>
+        <span item-left>Tipo</span>
         <span item-right>
-          <ion-input text-right disabled type="text" [(ngModel)]="viaje.$key" name="id"></ion-input>
+
+          <h2 *ngIf="viaje.tipo == 'ci'">Cisterna</h2>
+          <h2 *ngIf="viaje.tipo == 'co'">Contenedor</h2>
+
+        </span>
+      </ion-item>
+      <ion-item>
+        <span item-left>Referencia</span>
+        <span item-right>
+          <h2> {{ viaje.referencia }}</h2>
         </span>
       </ion-item>
       <ion-item>
         <span item-left>Mercancia</span>
         <span item-right>
-          <ion-input text-right disabled type="text" [(ngModel)]="viaje.mercancia" name="mercancia"></ion-input>
+        <h2> {{ viaje.mercancia }}</h2>
         </span>
       </ion-item>
       <ion-item>
         <span item-left>Volumen/carga</span>
         <span item-right>
-          <ion-input text-right disabled type="text" [(ngModel)]="viaje.carga" name="carga"></ion-input>
+          <h2> {{ viaje.carga }}</h2>
         </span>
       </ion-item>
       <ion-item>
