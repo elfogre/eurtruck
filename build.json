@@ -1,0 +1,11 @@
+{
+"android": {
+  "release": {
+  "keystore": "eurtruck.keystore",
+  "storePassword": "eurotrans",
+  "alias": "eurotrans",
+  "password" : "eurotrans",
+  "keystoreType": ""
+  }
+  }
+}
